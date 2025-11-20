@@ -1,6 +1,5 @@
-package me.partypronl.estateagent.ui.theme
+package me.partypronl.estateagent.generic.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

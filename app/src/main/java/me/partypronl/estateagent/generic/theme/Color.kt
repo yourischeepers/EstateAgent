@@ -1,4 +1,4 @@
-package me.partypronl.estateagent.ui.theme
+package me.partypronl.estateagent.generic.theme
 
 import androidx.compose.ui.graphics.Color
 
