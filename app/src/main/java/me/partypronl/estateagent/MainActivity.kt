@@ -6,8 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
-import me.partypronl.estateagent.navigation.RootNavHost
 import me.partypronl.estateagent.generic.theme.EstateAgentTheme
+import me.partypronl.estateagent.root.RootScreen
 
 class MainActivity : ComponentActivity() {
 
@@ -16,8 +16,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            EstateAgentTheme {
-                RootNavHost(modifier = Modifier.fillMaxSize())
+            EstateAgentTheme(
+                darkTheme = true,
+            ) {
+                RootScreen(modifier = Modifier.fillMaxSize())
             }
         }
     }

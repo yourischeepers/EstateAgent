@@ -14,6 +14,16 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        load(file.inputStream())
+    }
+}
+
+val mapsApiKey = localProperties.getProperty("MAPS_API_KEY") ?: ""
+val mapsStyleId = localProperties.getProperty("MAPS_STYLE_ID") ?: ""
+
 android {
     namespace = "me.partypronl.estateagent"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -30,6 +40,10 @@ android {
         versionCode = 3
         versionName = "1.0.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
+
+        buildConfigField("String", "MAPS_STYLE_ID", "\"$mapsStyleId\"")
     }
 
     buildTypes {
