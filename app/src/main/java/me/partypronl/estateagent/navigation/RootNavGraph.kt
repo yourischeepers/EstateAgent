@@ -1,27 +1,17 @@
 package me.partypronl.estateagent.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 import me.partypronl.estateagent.home.HomeScreen
 
 @Serializable
-data object RootNavGraph {
+sealed interface Route : NavKey {
 
     @Serializable
-    data object Home
+    data object Home : Route
 }
 
-fun NavGraphBuilder.rootRoutes(
-    navController: NavController,
-) {
-    composable<RootNavGraph.Home> {
-        HomeScreen(
-            navController = navController,
-            modifier = Modifier.fillMaxSize(),
-        )
-    }
+fun EntryProviderScope<NavKey>.rootRoutes() {
+    this.entry<Route.Home> { HomeScreen() }
 }

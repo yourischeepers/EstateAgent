@@ -2,18 +2,19 @@ package me.partypronl.estateagent.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
 
 @Composable
 fun RootNavHost(
+    startRoute: Route,
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
-) = NavHost(
-    navController = navController,
-    startDestination = RootNavGraph.Home,
+    navController: NavController = rememberNavController(startRoute),
+) = NavDisplay(
+    backStack = navController.backStack,
+    onBack = { navController.popBackStack() },
     modifier = modifier,
-) {
-    rootRoutes(navController)
-}
+    entryProvider = entryProvider {
+        rootRoutes()
+    }
+)

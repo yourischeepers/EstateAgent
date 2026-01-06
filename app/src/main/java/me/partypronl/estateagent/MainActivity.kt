@@ -16,9 +16,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            EstateAgentTheme(
-                darkTheme = true,
-            ) {
+            EstateAgentTheme {
                 RootScreen(modifier = Modifier.fillMaxSize())
             }
         }
