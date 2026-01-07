@@ -5,4 +5,8 @@
     <string name="home_open_map_alt">Map</string>
     <string name="home_close_map_alt">Close map</string>
     <string name="home_open_settings_alt">Settings</string>
+    <string name="home_shortcut_searches">Searches</string>
+    <string name="home_shortcut_react">React</string>
+    <string name="home_shortcut_waiting">Waiting</string>
+    <string name="home_shortcut_history">History</string>
 </resources>

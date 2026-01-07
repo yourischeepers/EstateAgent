@@ -16,6 +16,9 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -46,21 +49,22 @@ fun EARootSheet(
             .graphicsLayer {
                 translationY = -sheetOffsetPx
             }
-            .background(
-                color = MaterialTheme.colorScheme.surfaceContainerLow,
+            .clip(
                 shape = RoundedCornerShape(
                     bottomStart = 24.dp,
                     bottomEnd = 24.dp,
                 )
             )
+            .background(color = MaterialTheme.colorScheme.surfaceContainerLow)
             .padding(top = dragHandleTopPadding + 4.dp)
             .padding(horizontal = 24.dp)
             .weight(1F),
     ) {
         Column(
-            modifier = Modifier.graphicsLayer {
-                translationY = sheetOffsetPx
-            },
+            modifier = Modifier
+                .graphicsLayer {
+                    translationY = sheetOffsetPx
+                },
         ) {
             content()
         }
