@@ -39,9 +39,10 @@ private fun Content(
     verticalAlignment = Alignment.CenterVertically,
     modifier = modifier
         .padding(
-            horizontal = 24.dp,
-            vertical = 8.dp,
+            top = 12.dp,
+            bottom = 8.dp,
         )
+        .padding(horizontal = 24.dp,)
         .navigationBarsPadding()
         .fillMaxWidth(),
 ) {

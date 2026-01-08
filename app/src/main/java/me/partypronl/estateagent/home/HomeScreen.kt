@@ -4,9 +4,11 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,6 +48,7 @@ fun HomeScreen(
         sheetState = sheetState,
         onClickOpenMap = viewModel::onOpenMapClicked,
         onClickCloseMap = viewModel::onCloseMapClicked,
+        onClickSync = viewModel::onSyncClicked,
         modifier = modifier,
     )
 }
@@ -56,6 +59,7 @@ private fun Content(
     sheetState: SheetState,
     onClickOpenMap: () -> Unit,
     onClickCloseMap: () -> Unit,
+    onClickSync: () -> Unit,
     modifier: Modifier = Modifier,
 ) = EARootSheet(
     sheetState = sheetState,
@@ -78,6 +82,13 @@ private fun Content(
         onClickOpenWaitingForReaction = {}, // TODO
         onClickOpenHistory = {} // TODO
     )
+
+    // TODO Remove
+    Button(
+        onClick = onClickSync,
+    ) {
+        Text(text = "Sync")
+    }
 }
 
 @Composable

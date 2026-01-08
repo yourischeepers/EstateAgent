@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMapOptions
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
@@ -35,6 +36,9 @@ private object RootMapTokens {
 
     val TopBlurHeight = 32.dp
     val TopBlurRadius = 4.dp
+
+    const val NetherlandsLat = 52.1326
+    const val NetherlandsLon = 5.2913
 }
 
 @Composable
@@ -42,7 +46,15 @@ fun RootMap(
     modifier: Modifier = Modifier,
     viewModel: RootMapViewModel = koinViewModel(),
 ) {
-    val cameraPositionState = rememberCameraPositionState()
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition(
+            /* target = */ LatLng(RootMapTokens.NetherlandsLat, RootMapTokens.NetherlandsLon),
+            /* zoom = */ RootMapZoom.Country.getGoogleZoom(),
+            /* tilt = */ 0F,
+            /* bearing = */ 0F,
+        )
+    }
+
     viewModel.navigation.HandleNavigation(cameraPositionState)
 
     Content(
@@ -117,6 +129,7 @@ private fun EventFlow<RootMapNavigation>.HandleNavigation(
 }
 
 private fun RootMapZoom.getGoogleZoom(): Float = when (this) {
+    RootMapZoom.Country -> 8F
     RootMapZoom.City -> 13F
     RootMapZoom.Home -> 15F
 }
