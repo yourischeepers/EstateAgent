@@ -11,11 +11,12 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.partypronl.estateagent.R
@@ -25,7 +26,9 @@ import me.partypronl.estateagent.generic.composable.button.EAIconButton
 import me.partypronl.estateagent.generic.composable.rememberDefaultSheetState
 import me.partypronl.estateagent.presentation.home.HomeEvent
 import me.partypronl.estateagent.presentation.home.HomeViewModel
+import me.partypronl.estateagent.presentation.home.model.HomeUiModel
 import me.partypronl.estateagent.presentation.util.EventFlow
+import me.partypronl.estateagent.presentation.util.TypedUiState
 import me.partypronl.estateagent.util.CollectEvents
 import org.koin.androidx.compose.koinViewModel
 
@@ -35,6 +38,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
+    val uiState by viewModel.uiState.collectAsState()
     val sheetState = rememberDefaultSheetState()
     viewModel.events.HandleEvents(sheetState)
 
@@ -45,6 +49,7 @@ fun HomeScreen(
     }
 
     Content(
+        uiState = uiState,
         sheetState = sheetState,
         onClickOpenMap = viewModel::onOpenMapClicked,
         onClickCloseMap = viewModel::onCloseMapClicked,
@@ -56,6 +61,7 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Content(
+    uiState: TypedUiState<HomeUiModel, Unit>,
     sheetState: SheetState,
     onClickOpenMap: () -> Unit,
     onClickCloseMap: () -> Unit,
@@ -66,14 +72,18 @@ private fun Content(
     modifier = modifier,
 ) {
     Header(
+        uiState = uiState,
         sheetState = sheetState,
         onClickOpenMap = onClickOpenMap,
         onClickCloseMap = onClickCloseMap,
     )
 
-    AnimatedVisibilityNewListingsSection(
-        visible = sheetState.targetValue == SheetValue.Expanded,
-    )
+    uiState.normalDataOrNull()?.let {
+        AnimatedVisibilityNewListingsSection(
+            imageUrls = it.newHomesImages,
+            visible = sheetState.targetValue == SheetValue.Expanded,
+        )
+    }
 
     HomeShortcuts(
         modifier = Modifier.padding(top = 8.dp),
@@ -93,6 +103,7 @@ private fun Content(
 
 @Composable
 private fun ColumnScope.AnimatedVisibilityNewListingsSection(
+    imageUrls: List<String>,
     visible: Boolean,
     modifier: Modifier = Modifier,
 ) = AnimatedVisibility(
@@ -100,6 +111,7 @@ private fun ColumnScope.AnimatedVisibilityNewListingsSection(
     modifier = modifier,
 ) {
     HomeNewListingsSection(
+        imageUrls = imageUrls,
         onClick = {}, // TODO
         modifier = Modifier.padding(top = 20.dp),
     )
@@ -108,16 +120,33 @@ private fun ColumnScope.AnimatedVisibilityNewListingsSection(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Header(
+    uiState: TypedUiState<HomeUiModel, Unit>,
     sheetState: SheetState,
     onClickOpenMap: () -> Unit,
     onClickCloseMap: () -> Unit,
     modifier: Modifier = Modifier,
 ) = PrimarySheetHeader(
     title = stringResource(R.string.home_title),
-    subtitle = stringResource(
-        R.string.home_subtitle,
-        4.toString(), // TODO
-    ),
+    subtitle = when (uiState) {
+        is TypedUiState.Normal -> {
+            if (uiState.data.newHomesAmount != 0) {
+                stringResource(
+                    R.string.home_subtitle_new_homes,
+                    uiState.data.newHomesAmount.toString(),
+                )
+            } else {
+                stringResource(R.string.home_subtitle_no_new_homes)
+            }
+        }
+
+        is TypedUiState.Loading -> {
+            stringResource(R.string.home_subtitle_loading)
+        }
+
+        is TypedUiState.Error -> {
+            stringResource(R.string.home_subtitle_error)
+        }
+    },
     leadingIcon = R.drawable.ic_robot,
     actions = {
         Crossfade(

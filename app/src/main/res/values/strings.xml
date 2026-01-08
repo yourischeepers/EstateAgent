@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">EstateAgent</string>
     <string name="home_title">EstateAgent</string>
-    <string name="home_subtitle">%s new homes found</string>
+    <string name="home_subtitle_new_homes">%s new homes found</string>
     <string name="home_open_map_alt">Map</string>
     <string name="home_close_map_alt">Close map</string>
     <string name="home_open_settings_alt">Settings</string>
@@ -10,4 +10,7 @@
     <string name="home_shortcut_waiting">Waiting</string>
     <string name="home_shortcut_history">History</string>
     <string name="home_new_listings_start_alt">Explore new listings</string>
+    <string name="home_subtitle_error">Something went wrong</string>
+    <string name="home_subtitle_no_new_homes">No new homes found</string>
+    <string name="home_subtitle_loading">Loading new homes</string>
 </resources>
