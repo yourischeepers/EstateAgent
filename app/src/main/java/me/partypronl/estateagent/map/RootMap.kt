@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,7 +18,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.MarkerComposable
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
 import dev.chrisbanes.haze.HazeProgressive
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeEffect
@@ -28,6 +32,8 @@ import me.partypronl.estateagent.BuildConfig
 import me.partypronl.estateagent.presentation.root.map.RootMapNavigation
 import me.partypronl.estateagent.presentation.root.map.RootMapViewModel
 import me.partypronl.estateagent.presentation.root.map.controller.RootMapZoom
+import me.partypronl.estateagent.presentation.root.map.model.RootMapHomeMarkerUiModel
+import me.partypronl.estateagent.presentation.root.map.model.RootMapUiModel
 import me.partypronl.estateagent.presentation.util.EventFlow
 import me.partypronl.estateagent.util.CollectEvents
 import org.koin.androidx.compose.koinViewModel
@@ -46,6 +52,8 @@ fun RootMap(
     modifier: Modifier = Modifier,
     viewModel: RootMapViewModel = koinViewModel(),
 ) {
+    val uiModel by viewModel.uiModel.collectAsState()
+
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(
             /* target = */ LatLng(RootMapTokens.NetherlandsLat, RootMapTokens.NetherlandsLon),
@@ -58,6 +66,7 @@ fun RootMap(
     viewModel.navigation.HandleNavigation(cameraPositionState)
 
     Content(
+        uiModel = uiModel,
         cameraPositionState = cameraPositionState,
         modifier = modifier
     )
@@ -65,11 +74,13 @@ fun RootMap(
 
 @Composable
 private fun Content(
+    uiModel: RootMapUiModel,
     cameraPositionState: CameraPositionState,
     modifier: Modifier = Modifier,
     hazeState: HazeState = rememberHazeState(),
 ) = Box(modifier = modifier) {
     Map(
+        homeMarkers = uiModel.homeMarkers,
         cameraPositionState = cameraPositionState,
         modifier = Modifier
             .fillMaxSize()
@@ -90,6 +101,7 @@ private fun Content(
 
 @Composable
 private fun Map(
+    homeMarkers: List<RootMapHomeMarkerUiModel>,
     cameraPositionState: CameraPositionState,
     modifier: Modifier = Modifier,
 ) = GoogleMap(
@@ -106,7 +118,18 @@ private fun Map(
         tiltGesturesEnabled = false
     ),
     modifier = modifier,
-)
+) {
+    homeMarkers.forEach { homeMarker ->
+        val latLng = LatLng(homeMarker.lat, homeMarker.lon)
+
+        MarkerComposable(
+            state = rememberMarkerState(position = latLng),
+            tag = homeMarker,
+        ) {
+            RootMapHomeMarker(homeMarker.state)
+        }
+    }
+}
 
 @Composable
 private fun EventFlow<RootMapNavigation>.HandleNavigation(
