@@ -10,14 +10,14 @@ import org.koin.core.annotation.Single
 @ComponentScan("me.partypronl.estateagent.data.local")
 class DataLocalModule {
 
-//    @Single
-//    fun provideAppDatabase(context: Context): AppDatabase {
-//        return Room
-//            .databaseBuilder(
-//                context = context,
-//                klass = AppDatabase::class.java,
-//                name = "database",
-//            )
-//            .build()
-//    }
+    @Single
+    fun provideAppDatabase(context: Context): AppDatabase {
+        return Room
+            .databaseBuilder(
+                context = context,
+                klass = AppDatabase::class.java,
+                name = "database",
+            )
+            .build()
+    }
 }
