@@ -1,9 +1,12 @@
 package me.partypronl.estateagent.domain.homes.model
 
+import kotlinx.serialization.Serializable
+import me.partypronl.estateagent.domain.util.UUIDSerializer
 import java.util.UUID
 
+@Serializable
 data class Listing(
-    val id: UUID,
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
     val address: String,
     val postalCode: String,
     val area: String,

@@ -29,6 +29,8 @@ import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.partypronl.estateagent.BuildConfig
+import me.partypronl.estateagent.navigation.NavController
+import me.partypronl.estateagent.navigation.Route
 import me.partypronl.estateagent.presentation.root.map.RootMapNavigation
 import me.partypronl.estateagent.presentation.root.map.RootMapViewModel
 import me.partypronl.estateagent.presentation.root.map.controller.RootMapZoom
@@ -49,6 +51,7 @@ private object RootMapTokens {
 
 @Composable
 fun RootMap(
+    navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: RootMapViewModel = koinViewModel(),
 ) {
@@ -63,11 +66,12 @@ fun RootMap(
         )
     }
 
-    viewModel.navigation.HandleNavigation(cameraPositionState)
+    viewModel.navigation.HandleNavigation(cameraPositionState, navController)
 
     Content(
         uiModel = uiModel,
         cameraPositionState = cameraPositionState,
+        onClickHomeMarker = viewModel::onClickHomeMarker,
         modifier = modifier
     )
 }
@@ -76,12 +80,14 @@ fun RootMap(
 private fun Content(
     uiModel: RootMapUiModel,
     cameraPositionState: CameraPositionState,
+    onClickHomeMarker: (RootMapHomeMarkerUiModel) -> Unit,
     modifier: Modifier = Modifier,
     hazeState: HazeState = rememberHazeState(),
 ) = Box(modifier = modifier) {
     Map(
         homeMarkers = uiModel.homeMarkers,
         cameraPositionState = cameraPositionState,
+        onClickHomeMarker = onClickHomeMarker,
         modifier = Modifier
             .fillMaxSize()
             .hazeSource(state = hazeState),
@@ -103,6 +109,7 @@ private fun Content(
 private fun Map(
     homeMarkers: List<RootMapHomeMarkerUiModel>,
     cameraPositionState: CameraPositionState,
+    onClickHomeMarker: (RootMapHomeMarkerUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) = GoogleMap(
     cameraPositionState = cameraPositionState,
@@ -125,6 +132,10 @@ private fun Map(
         MarkerComposable(
             state = rememberMarkerState(position = latLng),
             tag = homeMarker,
+            onClick = {
+                onClickHomeMarker(homeMarker)
+                true
+            }
         ) {
             RootMapHomeMarker(homeMarker.state)
         }
@@ -134,6 +145,7 @@ private fun Map(
 @Composable
 private fun EventFlow<RootMapNavigation>.HandleNavigation(
     cameraPositionState: CameraPositionState,
+    navController: NavController,
     scope: CoroutineScope = rememberCoroutineScope(),
 ) {
     CollectEvents {
@@ -147,6 +159,8 @@ private fun EventFlow<RootMapNavigation>.HandleNavigation(
                     durationMs = 2000,
                 )
             }
+
+            is RootMapNavigation.OpenDetails -> navController.navigate(Route.ListingDetails(it.home))
         }
     }
 }

@@ -7,12 +7,18 @@ import androidx.compose.ui.Modifier
 import me.partypronl.estateagent.map.RootMap
 import me.partypronl.estateagent.navigation.RootNavHost
 import me.partypronl.estateagent.navigation.Route
+import me.partypronl.estateagent.navigation.rememberNavController
 
 @Composable
 fun RootScreen(
     modifier: Modifier = Modifier,
 ) = Box(modifier = modifier) {
-    RootMap(modifier = Modifier.fillMaxSize())
+    val navController = rememberNavController(Route.Home)
 
-    RootNavHost(startRoute = Route.Home)
+    RootMap(
+        navController = navController,
+        modifier = Modifier.fillMaxSize(),
+    )
+
+    RootNavHost(navController = navController)
 }

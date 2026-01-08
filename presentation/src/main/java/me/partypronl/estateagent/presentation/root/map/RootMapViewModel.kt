@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.collectLatest
 import me.partypronl.estateagent.domain.homes.ObserveHomes
 import me.partypronl.estateagent.presentation.root.map.controller.RootMapAction
 import me.partypronl.estateagent.presentation.root.map.controller.RootMapControllerActionHolder
+import me.partypronl.estateagent.presentation.root.map.model.RootMapHomeMarkerUiModel
+import me.partypronl.estateagent.presentation.root.map.model.RootMapHomeState
 import me.partypronl.estateagent.presentation.root.map.model.RootMapUiMapper
 import me.partypronl.estateagent.presentation.root.map.model.RootMapUiModel
 import me.partypronl.estateagent.presentation.util.MutableEventFlow
@@ -37,6 +39,12 @@ class RootMapViewModel(
 
     init {
         startObservingActions()
+    }
+
+    fun onClickHomeMarker(marker: RootMapHomeMarkerUiModel) {
+        if (marker.state == RootMapHomeState.Selected) return
+        
+        _navigation.emitEvent(RootMapNavigation.OpenDetails(marker.home))
     }
 
     private fun handleAction(action: RootMapAction) {

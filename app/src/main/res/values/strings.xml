@@ -13,4 +13,5 @@
     <string name="home_subtitle_error">Something went wrong</string>
     <string name="home_subtitle_no_new_homes">No new homes found</string>
     <string name="home_subtitle_loading">Loading new homes</string>
+    <string name="generic_back">Back</string>
 </resources>

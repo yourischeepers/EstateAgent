@@ -7,14 +7,13 @@ import androidx.navigation3.ui.NavDisplay
 
 @Composable
 fun RootNavHost(
-    startRoute: Route,
+    navController: NavController,
     modifier: Modifier = Modifier,
-    navController: NavController = rememberNavController(startRoute),
 ) = NavDisplay(
     backStack = navController.backStack,
     onBack = { navController.popBackStack() },
     modifier = modifier,
     entryProvider = entryProvider {
-        rootRoutes()
+        rootRoutes(navController)
     }
 )

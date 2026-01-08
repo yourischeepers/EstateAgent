@@ -1,5 +1,6 @@
 package me.partypronl.estateagent.presentation.root.map
 
+import me.partypronl.estateagent.domain.homes.model.Home
 import me.partypronl.estateagent.presentation.root.map.controller.RootMapZoom
 
 sealed interface RootMapNavigation {
@@ -9,4 +10,6 @@ sealed interface RootMapNavigation {
         val lon: Double,
         val zoom: RootMapZoom,
     ) : RootMapNavigation
+
+    data class OpenDetails(val home: Home) : RootMapNavigation
 }
