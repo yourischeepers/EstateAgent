@@ -9,5 +9,8 @@ data class HomeEntity(
     val state: Int,
     val address: String,
     val postalCode: String,
+    val area: String,
     val imageUrls: String, // TODO make this a list
+    val locationLat: Double?,
+    val locationLon: Double?,
 )

@@ -19,7 +19,7 @@ class RemoteFundaDataSource(
         val listingUrls = htmlExtractor.extractUrls(html)
         val listings = listingUrls.map {
             val listingHtml = service.getListingHtml(it)
-            htmlExtractor.extractListing(listingHtml)
+            htmlExtractor.extractListing(listingHtml, query.area)
         }
         listings.forEach {
             println("Found listing with name ${it.address}")

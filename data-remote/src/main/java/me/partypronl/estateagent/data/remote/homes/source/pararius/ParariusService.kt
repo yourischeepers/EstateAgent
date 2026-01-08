@@ -2,9 +2,9 @@ package me.partypronl.estateagent.data.remote.homes.source.pararius
 
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
-import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Single
 
-@Factory
+@Single
 class ParariusService(
     httpClientCreator: ParariusHttpClientCreator,
 ) {

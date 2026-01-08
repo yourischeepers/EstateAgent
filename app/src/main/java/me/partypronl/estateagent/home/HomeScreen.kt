@@ -81,7 +81,7 @@ private fun Content(
     uiState.normalDataOrNull()?.let {
         AnimatedVisibilityNewListingsSection(
             imageUrls = it.newHomesImages,
-            visible = sheetState.targetValue == SheetValue.Expanded,
+            visible = sheetState.targetValue == SheetValue.Expanded && it.newHomesImages.isNotEmpty(),
         )
     }
 

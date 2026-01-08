@@ -21,6 +21,6 @@ class RemoteParariusDataSource(
             minSquareMeters = 35,
         )
 
-        return htmlExtractor.extractListings(listingsHtml)
+        return htmlExtractor.extractListings(listingsHtml, query.area)
     }
 }

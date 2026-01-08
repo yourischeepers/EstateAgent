@@ -21,7 +21,8 @@ class MergeListings {
         return Listing(
             id = first.id,
             address = first.address,
-            postalCode = second.address,
+            postalCode = first.postalCode,
+            area = first.area,
             imageUrls = (first.imageUrls + second.imageUrls).distinct(),
         )
     }

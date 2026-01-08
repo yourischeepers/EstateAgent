@@ -9,7 +9,7 @@ import java.util.UUID
 @Factory
 class ParariusHtmlExtractor {
 
-    fun extractListings(html: String): List<Listing> {
+    fun extractListings(html: String, area: String): List<Listing> {
         val document = Jsoup.parse(html)
 
         return document.select(ListingsSelector).map {
@@ -27,6 +27,7 @@ class ParariusHtmlExtractor {
                 id = UUID.randomUUID(),
                 address = address,
                 postalCode = postalCode,
+                area = area,
                 imageUrls = listOf(imageUrl),
             )
         }

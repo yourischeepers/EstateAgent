@@ -43,6 +43,7 @@ android {
 
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
 
+        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
         buildConfigField("String", "MAPS_STYLE_ID", "\"$mapsStyleId\"")
     }
 

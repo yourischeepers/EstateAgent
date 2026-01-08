@@ -11,13 +11,14 @@ class FundaHtmlExtractor {
 
     // TODO Probably want some nice utilities to do this kind of extraction faster
 
-    fun extractListing(html: String): Listing {
+    fun extractListing(html: String, area: String): Listing {
         val document = Jsoup.parse(html)
 
         return Listing(
             id = UUID.randomUUID(),
             address = document.selectFirst(AddressSelector)?.text() ?: throw ExtractionException("Missing address"),
             postalCode = "1234AB",
+            area = area,
             imageUrls = emptyList(),
         )
     }
