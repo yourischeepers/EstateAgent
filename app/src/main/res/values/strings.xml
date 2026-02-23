@@ -14,4 +14,6 @@
     <string name="home_subtitle_no_new_homes">No new homes found</string>
     <string name="home_subtitle_loading">Loading new homes</string>
     <string name="generic_back">Back</string>
+    <string name="currency_symbol">€</string>
+    <string name="listing_detail_images_expand_alt">Expand images</string>
 </resources>
